@@ -8,5 +8,5 @@ public interface Searchable<T> {
 
     Specification<T> getSpecification();
     Pageable getPageable();
-    Sort getSort();
+    Sort getSortSpec();
 }

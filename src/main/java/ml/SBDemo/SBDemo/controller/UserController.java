@@ -2,6 +2,7 @@ package ml.SBDemo.SBDemo.controller;
 
 import ml.SBDemo.SBDemo.dto.UserDto;
 import ml.SBDemo.SBDemo.service.UserService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,7 @@ public class UserController {
     }
 
     @GetMapping(path = "users")
-    public List<UserDto> searchUsers(@RequestParam UserDto userDto) {
+    public Page<UserDto> searchUsers(UserDto userDto) {
         return userService.searchUsers(userDto);
     }
 

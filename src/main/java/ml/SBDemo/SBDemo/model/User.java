@@ -2,8 +2,10 @@ package ml.SBDemo.SBDemo.model;
 
 
 import lombok.*;
-import org.dom4j.rule.Mode;
+import ml.SBDemo.SBDemo.utils.Specifications;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.DynamicInsert;
+import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.*;
 
@@ -37,4 +39,22 @@ public class User extends ModelBase<User> {
     @Column(name = "lastName", nullable = false)
     private String lastName;
 
+
+    @Override
+    public Specification<User> getSpecification() {
+        Specification<User> spec = super.getSpecification();
+        if (StringUtils.isNotBlank(userName)) {
+            spec = spec.and(Specifications.specLike("userName", "%" + userName + "%"));
+        }
+        if (StringUtils.isNotBlank(email)) {
+            spec = spec.and(Specifications.specLike("email", "%" + email + "%"));
+        }
+        if (StringUtils.isNotBlank(firstName)) {
+            spec = spec.and(Specifications.specLike("firstName", "%" + firstName + "%"));
+        }
+        if (StringUtils.isNotBlank(lastName)) {
+            spec = spec.and(Specifications.specLike("lastName", "%" + lastName + "%"));
+        }
+        return spec;
+    }
 }

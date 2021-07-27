@@ -1,9 +1,6 @@
 package ml.SBDemo.SBDemo.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.validation.Valid;
@@ -16,6 +13,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Builder
 public class UserDto extends DtoBase {
 
     private Integer id;

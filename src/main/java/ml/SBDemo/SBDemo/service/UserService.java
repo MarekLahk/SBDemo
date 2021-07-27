@@ -6,6 +6,7 @@ import ml.SBDemo.SBDemo.model.User;
 import ml.SBDemo.SBDemo.repository.UserRepository;
 import org.mapstruct.factory.Mappers;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
 @Service
 public class UserService {
@@ -42,8 +44,15 @@ public class UserService {
         return userMapper.toDto(userRepository.save(existingUser));
     }
 
-    public List<UserDto> searchUsers(UserDto userDto) {
-        return userMapper.toDtoList(userRepository.findAll());
+    public Page<UserDto> searchUsers(UserDto userDto) {
+        User searchModel = userMapper.toModel(userDto);
+        Page<UserDto> dtoPage = userRepository.findAll(searchModel.getSpecification(), searchModel.getPageable()).map(new Function<User, UserDto>() {
+            @Override
+            public UserDto apply(User user) {
+                return userMapper.toDto(user);
+            }
+        });
+        return dtoPage;
     }
 
     public void deleteUser(Integer id) throws Exception {

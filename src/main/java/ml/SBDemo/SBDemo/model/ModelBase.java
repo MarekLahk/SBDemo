@@ -14,10 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.Temporal;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 
@@ -27,9 +24,13 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 public abstract class ModelBase<T> implements Searchable<T>{
 
+    @Transient
     private Integer limit;
+    @Transient
     private Integer page;
+    @Transient
     private String sort;
+    @Transient
     private Sort.Direction dir;
 
     @Column(name = "createdAt", nullable = false)
@@ -60,12 +61,12 @@ public abstract class ModelBase<T> implements Searchable<T>{
         return PageRequest.of(
                 (page != null) ? page: 0,
                 (limit != null && limit >= 0) ? limit: 10,
-                getSort()
+                getSortSpec()
         );
     }
 
     @Override
-    public Sort getSort() {
+    public Sort getSortSpec() {
         if (sort == null) return Sort.unsorted();
         return (dir != null && dir == Sort.Direction.DESC) ?
                 Sort.by(sort).descending(): Sort.by(sort).ascending();
